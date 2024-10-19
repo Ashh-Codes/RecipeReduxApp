@@ -21,7 +21,7 @@ const recipeSlice =createSlice({
     reducers:{
         //search product
         searchProduct :(state,actionFromHeader)=>{
-        state.allRecipes=    state.dummyAllRecipes.filter(item=>item.name.toLowerCase().includes(actionFromHeader.payload))
+        state.allRecipes=    state.dummyAllRecipes.filter(item=>item.cuisine.toLowerCase().includes(actionFromHeader.payload))
         }
 
     },
