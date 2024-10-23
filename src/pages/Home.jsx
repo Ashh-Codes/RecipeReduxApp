@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useFetcher, useNavigate } from 'react-router-dom'
 import { fetchAllRecipes } from '../redux/slices/recipeSlice'
 import Header from '../components/Header'
-
+import Footer from '../components/Footer'
 
 const Home = () => {
+    const [email,setemail]=useState("")
+    const [password,setpassword]=useState("")
+    const [googlemail,setgooglemail] =useState("")
     const dispatch =useDispatch()
+    const navigate =useNavigate()
 
+    useEffect(()=>{
+       sessionStorage.getItem("email")
+       setemail(sessionStorage.getItem("email"))
+       sessionStorage.getItem("password")
+       setpassword(sessionStorage.getItem("password"))
+       sessionStorage.getItem("emailgoogle")
+       setgooglemail(sessionStorage.getItem("emailgoogle"))
+
+       dispatch(fetchAllRecipes())
+    },[])
     const [currentPage,setcurrentPage] =useState(1)
     const productsPerPage = 8
    
@@ -18,9 +32,7 @@ const Home = () => {
     const currentPageFirstRecipeIndex = currentPageLastRecipeIndex - productsPerPage
     const allvisibleRecipes = allRecipes?.slice(currentPageFirstRecipeIndex,currentPageLastRecipeIndex)
     
-    useEffect(()=>{
-        dispatch(fetchAllRecipes())
-    },[])
+    
 
     const navigateToNextPage =()=>{
         if(currentPage!=totalNoPages){
@@ -31,6 +43,16 @@ const Home = () => {
         if(currentPage!=1){
             setcurrentPage(currentPage-1)
         }
+    }
+    const handleview=(id)=>{
+        if((email&&password) || googlemail ){
+            navigate(`/${id}/recipe`)
+        }
+        else{
+            alert("Please login to continue")
+            navigate('/auth')
+        }
+
     }
 
   return (
@@ -67,7 +89,8 @@ const Home = () => {
             <img style={{width:'100%',height:'300px'}} src={recipe?.image} alt="" />
             <div className='text-center'>
             <h2 className='my-2'>{recipe?.name}</h2>
-            <Link className='bg-red-600 p-2 rounded text-white inline-block' to={`/${recipe?.id}/recipe`}>View More</Link>
+            <button onClick={()=>handleview(recipe?.id)} className='bg-red-600 p-2 rounded text-white inline-block mt-3'>View More</button>
+            {/* <Link onClick={} className='bg-red-600 p-2 rounded text-white inline-block' to={`/${recipe?.id}/recipe`}>View More</Link> */}
             </div>
         </div>
             ))
@@ -88,6 +111,7 @@ const Home = () => {
 
        }
     </div>
+    <Footer/>
     </>
   )
 }

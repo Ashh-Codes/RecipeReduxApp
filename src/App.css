@@ -1,3 +1,10 @@
 *{
   font-family: "Exo 2", sans-serif;
 }
+
+.bgimage{
+  background-image: url("https://wallpaperaccess.com/full/2696016.jpg");
+background-position: center;
+background-size: cover;
+  background-repeat: no-repeat;
+}
